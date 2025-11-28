@@ -39,7 +39,7 @@ export const ChangePasswordForm: React.FC = () => {
       });
       setMessage({ type: 'success', text: 'Contraseña actualizada correctamente' });
       setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-    } catch (error) {
+    } catch {
       setMessage({ type: 'error', text: 'La contraseña actual es incorrecta o hubo un error' });
     } finally {
       setIsLoading(false);

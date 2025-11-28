@@ -82,7 +82,7 @@ export const Health: React.FC = () => {
         ].map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}
+            onClick={() => setActiveTab(tab.id as 'sleep' | 'stress' | 'heart' | 'energy')}
             className={`pb-4 px-4 font-medium transition-colors border-b-2 ${
               activeTab === tab.id
                 ? 'border-primary-500 text-primary-600'

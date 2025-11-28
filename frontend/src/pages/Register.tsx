@@ -22,8 +22,9 @@ export const Register: React.FC = () => {
     try {
       await register(email, password, name);
       navigate('/dashboard');
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Error al registrarse');
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
+      setError(error.response?.data?.message || 'Error al registrarse');
     } finally {
       setIsLoading(false);
     }

@@ -31,27 +31,17 @@ export const useAuthStore = create<AuthStore>((set) => ({
   isLoading: false,
 
   login: async (email: string, password: string) => {
-    try {
-      const data: AuthResponse = await authService.login({ email, password });
-      localStorage.setItem('token', data.access_token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      set({ user: data.user, token: data.access_token, isAuthenticated: true });
-    } catch (error) {
-      // Re-throw the error so the component can catch and display it
-      throw error;
-    }
+    const data: AuthResponse = await authService.login({ email, password });
+    localStorage.setItem('token', data.access_token);
+    localStorage.setItem('user', JSON.stringify(data.user));
+    set({ user: data.user, token: data.access_token, isAuthenticated: true });
   },
 
   register: async (email: string, password: string, name: string) => {
-    try {
-      const data: AuthResponse = await authService.register({ email, password, name });
-      localStorage.setItem('token', data.access_token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      set({ user: data.user, token: data.access_token, isAuthenticated: true });
-    } catch (error) {
-      // Re-throw the error so the component can catch and display it
-      throw error;
-    }
+    const data: AuthResponse = await authService.register({ email, password, name });
+    localStorage.setItem('token', data.access_token);
+    localStorage.setItem('user', JSON.stringify(data.user));
+    set({ user: data.user, token: data.access_token, isAuthenticated: true });
   },
 
   logout: () => {
@@ -67,7 +57,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
       try {
         const user = JSON.parse(userStr);
         set({ user, token, isAuthenticated: true });
-      } catch (e) {
+      } catch {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         set({ user: null, token: null, isAuthenticated: false });
