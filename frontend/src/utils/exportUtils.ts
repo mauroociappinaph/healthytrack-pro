@@ -1,5 +1,3 @@
-import { format } from 'date-fns';
-
 export const exportToCSV = (data: any[], filename: string) => {
   if (!data || data.length === 0) {
     console.warn('No data to export');
@@ -32,8 +30,8 @@ export const exportToCSV = (data: any[], filename: string) => {
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
 
-  if (navigator.msSaveBlob) { // IE 10+
-    navigator.msSaveBlob(blob, filename);
+  if ((navigator as any).msSaveBlob) { // IE 10+
+    (navigator as any).msSaveBlob(blob, filename);
   } else {
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
