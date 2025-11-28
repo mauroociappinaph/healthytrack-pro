@@ -82,7 +82,7 @@ NODE_ENV="development"
 # Generar cliente Prisma
 npx prisma generate
 
-# Crear base de datos y tablas
+#**Key Rule:** Never commit directly to `main` OR `develop`. Always use feature branches and Pull Requests.e de datos y tablas
 npx prisma migrate dev --name init
 ```
 

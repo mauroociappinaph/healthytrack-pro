@@ -5,9 +5,9 @@
 To ensure a stable and organized codebase, all contributors (human and AI) must follow these rules:
 
 ### 1. Branching Strategy
-- **`main`**: Production-ready code. **NEVER commit directly to `main`.**
-- **`develop`**: Integration branch for ongoing development.
-- **Feature Branches**: All new work must be done in a feature branch.
+- **`main`**: Production-ready code. **Protected.** No direct commits.
+- **`develop`**: Integration branch. **Protected.** No direct commits. All features merge here via PR.
+- **`feature/*`**: Working branches. All development happens here.
 
 ### 2. Workflow for New Tasks
 1.  **Start from `develop`**:
@@ -15,7 +15,7 @@ To ensure a stable and organized codebase, all contributors (human and AI) must 
     git checkout develop
     git pull origin develop
     ```
-2.  **Create a Feature Branch**:
+2.  **Create a Feature Branch** (MANDATORY):
     Use the naming convention `feature/task-name` or `fix/issue-name`.
     ```bash
     git checkout -b feature/my-new-feature
