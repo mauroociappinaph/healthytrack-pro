@@ -1,0 +1,303 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== USER ====================
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Profile fields
+  bio       String?
+  avatar    String?
+  preferences String? // JSON string for UI preferences
+
+  // Relations
+  walks         Walk[]
+  homeExercises HomeExercise[]
+  gymSessions   GymSession[]
+  meals         Meal[]
+  sleepRecords  Sleep[]
+  stressRecords Stress[]
+  heartMetrics  HeartMetric[]
+  energyRecords Energy[]
+  dailySummaries DailySummary[]
+  weeklyReports  WeeklyReport[]
+  notifications  Notification[]
+
+  @@map("users")
+}
+
+// ==================== WALKS ====================
+model Walk {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  duration  Int      // minutes
+  distance  Float?   // kilometers (optional)
+  intensity String   // "low", "medium", "high"
+  date      DateTime @default(now())
+  notes     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, date])
+  @@map("walks")
+}
+
+// ==================== HOME EXERCISES ====================
+model HomeExercise {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type      String   // "cardio", "strength", "flexibility", "yoga", etc.
+  duration  Int      // minutes
+  level     String   // "beginner", "intermediate", "advanced"
+  date      DateTime @default(now())
+  notes     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, date])
+  @@map("home_exercises")
+}
+
+// ==================== GYM SESSIONS ====================
+model GymSession {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name      String   // "Push Day", "Leg Day", etc.
+  date      DateTime @default(now())
+  duration  Int?     // total minutes
+  notes     String?
+
+  exercises GymExercise[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, date])
+  @@map("gym_sessions")
+}
+
+model GymExercise {
+  id          String     @id @default(uuid())
+  sessionId   String
+  session     GymSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  name        String     // "Bench Press", "Squat", etc.
+  sets        Int
+  reps        Int
+  weight      Float?     // kg
+  restTime    Int?       // seconds
+  notes       String?
+  order       Int        @default(0) // order within session
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([sessionId])
+  @@map("gym_exercises")
+}
+
+// ==================== MEALS ====================
+model Meal {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  photoUrl    String?  // Cloudinary URL
+  description String
+  calories    Int?     // approximate calories
+  type        String   // "breakfast", "lunch", "dinner", "snack"
+  date        DateTime @default(now())
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId, date])
+  @@map("meals")
+}
+
+// ==================== SLEEP ====================
+model Sleep {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  hours     Float    // sleep duration
+  quality   Int      // 1-10 scale
+  date      DateTime @default(now())
+  notes     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, date])
+  @@map("sleep")
+}
+
+// ==================== STRESS ====================
+model Stress {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  level     Int      // 1-10 scale
+  date      DateTime @default(now())
+  notes     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, date])
+  @@map("stress")
+}
+
+// ==================== HEART METRICS ====================
+model HeartMetric {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  rhr       Int?     // Resting Heart Rate (bpm)
+  hrv       Float?   // Heart Rate Variability (ms)
+  date      DateTime @default(now())
+  notes     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, date])
+  @@map("heart_metrics")
+}
+
+// ==================== ENERGY ====================
+model Energy {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  level     Int      // 1-10 scale
+  date      DateTime @default(now())
+  notes     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, date])
+  @@map("energy")
+}
+
+// ==================== DAILY SUMMARY ====================
+model DailySummary {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  date            DateTime @unique
+
+  // Activity metrics
+  walkMinutes     Int      @default(0)
+  exerciseMinutes Int      @default(0)
+  gymSessions     Int      @default(0)
+
+  // Nutrition
+  totalCalories   Int?
+
+  // Health metrics
+  sleepHours      Float?
+  sleepQuality    Int?
+  stressLevel     Int?
+  energyLevel     Int?
+  rhr             Int?
+  hrv             Float?
+
+  // Auto-generated
+  autoGenerated   Boolean  @default(true)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId, date])
+  @@map("daily_summaries")
+}
+
+// ==================== WEEKLY REPORT ====================
+model WeeklyReport {
+  id                 String   @id @default(uuid())
+  userId             String
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  weekNumber         Int      // ISO week number
+  year               Int
+  startDate          DateTime
+  endDate            DateTime
+
+  // Aggregated metrics
+  totalCalories      Int?
+  totalActiveMinutes Int      @default(0)
+  avgSleepHours      Float?
+  avgSleepQuality    Float?
+  avgStress          Float?
+  avgEnergy          Float?
+  avgRhr             Float?
+  avgHrv             Float?
+
+  // Gym progress
+  totalGymSessions   Int      @default(0)
+  gymProgress        String?  // JSON string with exercise progressions
+
+  // Recommendations (auto-generated)
+  recommendations    String   // JSON string array of recommendations
+
+  // Flags
+  fatigueDetected    Boolean  @default(false)
+  stressDetected     Boolean  @default(false)
+  lowEnergyDetected  Boolean  @default(false)
+  noProgressDetected Boolean  @default(false)
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@unique([userId, weekNumber, year])
+  @@index([userId, year, weekNumber])
+  @@map("weekly_reports")
+}
+
+// ==================== NOTIFICATIONS ====================
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type      String   // 'achievement', 'reminder', 'goal', 'alert'
+  title     String
+  message   String
+  icon      String?  // emoji or icon name
+
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
+  @@map("notifications")
+}

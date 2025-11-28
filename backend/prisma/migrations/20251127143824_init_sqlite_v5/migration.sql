@@ -1,0 +1,221 @@
+-- CreateTable
+CREATE TABLE "users" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "walks" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "userId" TEXT NOT NULL,
+    "duration" INTEGER NOT NULL,
+    "distance" REAL,
+    "intensity" TEXT NOT NULL,
+    "date" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "notes" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "walks_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "home_exercises" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "userId" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "duration" INTEGER NOT NULL,
+    "level" TEXT NOT NULL,
+    "date" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "notes" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "home_exercises_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "gym_sessions" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "userId" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "date" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "duration" INTEGER,
+    "notes" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "gym_sessions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "gym_exercises" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "sessionId" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "sets" INTEGER NOT NULL,
+    "reps" INTEGER NOT NULL,
+    "weight" REAL,
+    "restTime" INTEGER,
+    "notes" TEXT,
+    "order" INTEGER NOT NULL DEFAULT 0,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "gym_exercises_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "gym_sessions" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "meals" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "userId" TEXT NOT NULL,
+    "photoUrl" TEXT,
+    "description" TEXT NOT NULL,
+    "calories" INTEGER,
+    "type" TEXT NOT NULL,
+    "date" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "meals_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "sleep" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "userId" TEXT NOT NULL,
+    "hours" REAL NOT NULL,
+    "quality" INTEGER NOT NULL,
+    "date" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "notes" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "sleep_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "stress" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "userId" TEXT NOT NULL,
+    "level" INTEGER NOT NULL,
+    "date" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "notes" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "stress_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "heart_metrics" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "userId" TEXT NOT NULL,
+    "rhr" INTEGER,
+    "hrv" REAL,
+    "date" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "notes" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "heart_metrics_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "energy" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "userId" TEXT NOT NULL,
+    "level" INTEGER NOT NULL,
+    "date" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "notes" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "energy_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "daily_summaries" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "userId" TEXT NOT NULL,
+    "date" DATETIME NOT NULL,
+    "walkMinutes" INTEGER NOT NULL DEFAULT 0,
+    "exerciseMinutes" INTEGER NOT NULL DEFAULT 0,
+    "gymSessions" INTEGER NOT NULL DEFAULT 0,
+    "totalCalories" INTEGER,
+    "sleepHours" REAL,
+    "sleepQuality" INTEGER,
+    "stressLevel" INTEGER,
+    "energyLevel" INTEGER,
+    "rhr" INTEGER,
+    "hrv" REAL,
+    "autoGenerated" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "daily_summaries_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "weekly_reports" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "userId" TEXT NOT NULL,
+    "weekNumber" INTEGER NOT NULL,
+    "year" INTEGER NOT NULL,
+    "startDate" DATETIME NOT NULL,
+    "endDate" DATETIME NOT NULL,
+    "totalCalories" INTEGER,
+    "totalActiveMinutes" INTEGER NOT NULL DEFAULT 0,
+    "avgSleepHours" REAL,
+    "avgSleepQuality" REAL,
+    "avgStress" REAL,
+    "avgEnergy" REAL,
+    "avgRhr" REAL,
+    "avgHrv" REAL,
+    "totalGymSessions" INTEGER NOT NULL DEFAULT 0,
+    "gymProgress" TEXT,
+    "recommendations" TEXT NOT NULL,
+    "fatigueDetected" BOOLEAN NOT NULL DEFAULT false,
+    "stressDetected" BOOLEAN NOT NULL DEFAULT false,
+    "lowEnergyDetected" BOOLEAN NOT NULL DEFAULT false,
+    "noProgressDetected" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "weekly_reports_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
+
+-- CreateIndex
+CREATE INDEX "walks_userId_date_idx" ON "walks"("userId", "date");
+
+-- CreateIndex
+CREATE INDEX "home_exercises_userId_date_idx" ON "home_exercises"("userId", "date");
+
+-- CreateIndex
+CREATE INDEX "gym_sessions_userId_date_idx" ON "gym_sessions"("userId", "date");
+
+-- CreateIndex
+CREATE INDEX "gym_exercises_sessionId_idx" ON "gym_exercises"("sessionId");
+
+-- CreateIndex
+CREATE INDEX "meals_userId_date_idx" ON "meals"("userId", "date");
+
+-- CreateIndex
+CREATE INDEX "sleep_userId_date_idx" ON "sleep"("userId", "date");
+
+-- CreateIndex
+CREATE INDEX "stress_userId_date_idx" ON "stress"("userId", "date");
+
+-- CreateIndex
+CREATE INDEX "heart_metrics_userId_date_idx" ON "heart_metrics"("userId", "date");
+
+-- CreateIndex
+CREATE INDEX "energy_userId_date_idx" ON "energy"("userId", "date");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "daily_summaries_date_key" ON "daily_summaries"("date");
+
+-- CreateIndex
+CREATE INDEX "daily_summaries_userId_date_idx" ON "daily_summaries"("userId", "date");
+
+-- CreateIndex
+CREATE INDEX "weekly_reports_userId_year_weekNumber_idx" ON "weekly_reports"("userId", "year", "weekNumber");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "weekly_reports_userId_weekNumber_year_key" ON "weekly_reports"("userId", "weekNumber", "year");
