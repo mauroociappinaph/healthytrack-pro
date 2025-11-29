@@ -27,7 +27,7 @@ export const ProfileForm: React.FC = () => {
       const updatedUser = await authService.updateProfile(formData);
       updateUser(updatedUser);
       setMessage({ type: 'success', text: 'Perfil actualizado correctamente' });
-    } catch (error) {
+    } catch {
       setMessage({ type: 'error', text: 'Error al actualizar el perfil' });
     } finally {
       setIsLoading(false);

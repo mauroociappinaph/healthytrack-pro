@@ -21,13 +21,13 @@ export const ToastContainer: React.FC = () => {
 
   // Expose addToast globally
   React.useEffect(() => {
-    (window as any).addToast = (data: ToastData) => {
+    window.addToast = (data: ToastData) => {
       const id = `toast-${toastId++}`;
       setToasts(prev => [...prev, { ...data, id, onClose: removeToast }]);
     };
 
     return () => {
-      delete (window as any).addToast;
+      delete window.addToast;
     };
   }, [removeToast]);
 
@@ -42,11 +42,4 @@ export const ToastContainer: React.FC = () => {
       </div>
     </div>
   );
-};
-
-// Helper function to show toasts
-export const showToast = (data: ToastData) => {
-  if ((window as any).addToast) {
-    (window as any).addToast(data);
-  }
 };

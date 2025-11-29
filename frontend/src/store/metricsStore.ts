@@ -28,7 +28,7 @@ interface MetricsStore {
   // Heart Metrics
   fetchHeartMetrics: (startDate?: string, endDate?: string) => Promise<void>;
   addHeartMetric: (data: Partial<HeartMetric>) => Promise<void>;
-  getHeartAnalysis: () => Promise<any>;
+  getHeartAnalysis: () => Promise<{ avgRhr: number; avgHrv: number; trend: string }>;
 
   // Energy
   fetchEnergy: (startDate?: string, endDate?: string) => Promise<void>;

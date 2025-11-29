@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 import { register, login, logout } from './helpers/auth';
-import { testUsers } from './fixtures/data';
 
 test.describe('Authentication', () => {
   test.beforeEach(async ({ page }) => {

@@ -324,7 +324,7 @@ export const Reports: React.FC = () => {
                         ))}
                       </ul>
                     );
-                  } catch (e) {
+                  } catch {
                     return <p className="text-gray-500">Error cargando recomendaciones.</p>;
                   }
                 })()}

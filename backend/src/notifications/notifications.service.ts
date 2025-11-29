@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
+import { createNotificationData, getDefaultIconForType } from '../common/utils';
 
 @Injectable()
 export class NotificationsService {
@@ -50,35 +51,35 @@ export class NotificationsService {
   }
 
   // Helper method to create achievement notifications
-  async createAchievementNotification(userId: string, title: string, message: string, icon = '🏆') {
-    return this.create({
-      userId,
-      type: 'achievement',
-      title,
-      message,
-      icon,
-    });
+  async createAchievementNotification(
+    userId: string,
+    title: string,
+    message: string,
+    icon?: string
+  ) {
+    const data = createNotificationData(userId, 'achievement', title, message, icon);
+    return this.create(data);
   }
 
   // Helper method to create goal notifications
-  async createGoalNotification(userId: string, title: string, message: string, icon = '🎯') {
-    return this.create({
-      userId,
-      type: 'goal',
-      title,
-      message,
-      icon,
-    });
+  async createGoalNotification(
+    userId: string,
+    title: string,
+    message: string,
+    icon?: string
+  ) {
+    const data = createNotificationData(userId, 'goal', title, message, icon);
+    return this.create(data);
   }
 
   // Helper method to create reminder notifications
-  async createReminderNotification(userId: string, title: string, message: string, icon = '⏰') {
-    return this.create({
-      userId,
-      type: 'reminder',
-      title,
-      message,
-      icon,
-    });
+  async createReminderNotification(
+    userId: string,
+    title: string,
+    message: string,
+    icon?: string
+  ) {
+    const data = createNotificationData(userId, 'reminder', title, message, icon);
+    return this.create(data);
   }
 }
