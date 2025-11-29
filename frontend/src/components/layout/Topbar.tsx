@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuthStore } from '../../store/authStore';
-import { useTheme } from '../../contexts/ThemeContext';
+import { useTheme } from '../../contexts/themeUtils';
 import { useNavigate } from 'react-router-dom';
 import { NotificationDropdown } from './NotificationDropdown';
 

@@ -1,4 +1,5 @@
-export const exportToCSV = <T extends Record<string, unknown>>(data: T[], filename: string) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const exportToCSV = (data: any[], filename: string) => {
   if (!data || data.length === 0) {
     console.warn('No data to export');
     return;
