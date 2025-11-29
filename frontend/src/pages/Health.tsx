@@ -19,12 +19,14 @@ export const Health: React.FC = () => {
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
 
   // Form States
-  const [sleepHours, setSleepHours] = useState('');
-  const [sleepQuality, setSleepQuality] = useState('');
-  const [stressLevel, setStressLevel] = useState('');
-  const [energyLevel, setEnergyLevel] = useState('');
-  const [rhr, setRhr] = useState('');
-  const [hrv, setHrv] = useState('');
+  const [formData, setFormData] = useState({
+  sleepHours: '',
+  sleepQuality: '',
+  stressLevel: '',
+  energyLevel: '',
+  rhr: '',
+  hrv: '',
+});
 
   useEffect(() => {
     fetchSleep();
@@ -38,13 +40,13 @@ export const Health: React.FC = () => {
     const isoDate = new Date(date + 'T12:00:00').toISOString();
 
     if (activeTab === 'sleep') {
-      await addSleep({ hours: Number(sleepHours), quality: Number(sleepQuality), date: isoDate });
+      await addSleep({ hours: Number(formData.sleepHours), quality: Number(formData.sleepQuality), date: isoDate });
     } else if (activeTab === 'stress') {
-      await addStress({ level: Number(stressLevel), date: isoDate });
+      await addStress({ level: Number(formData.stressLevel), date: isoDate });
     } else if (activeTab === 'energy') {
-      await addEnergy({ level: Number(energyLevel), date: isoDate });
+      await addEnergy({ level: Number(formData.energyLevel), date: isoDate });
     } else if (activeTab === 'heart') {
-      await addHeartMetric({ rhr: Number(rhr), hrv: Number(hrv), date: isoDate });
+      await addHeartMetric({ rhr: Number(formData.rhr), hrv: Number(formData.hrv), date: isoDate });
     }
 
     setIsModalOpen(false);
@@ -52,12 +54,14 @@ export const Health: React.FC = () => {
   };
 
   const resetForm = () => {
-    setSleepHours('');
-    setSleepQuality('');
-    setStressLevel('');
-    setEnergyLevel('');
-    setRhr('');
-    setHrv('');
+    setFormData({
+      sleepHours: '',
+      sleepQuality: '',
+      stressLevel: '',
+      energyLevel: '',
+      rhr: '',
+      hrv: '',
+    });
   };
 
   if (isLoading) return <div className="flex justify-center p-10"><Spinner size="lg" /></div>;
@@ -82,7 +86,7 @@ export const Health: React.FC = () => {
         ].map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}
+            onClick={() => setActiveTab(tab.id as 'sleep' | 'stress' | 'heart' | 'energy')}
             className={`pb-4 px-4 font-medium transition-colors border-b-2 ${
               activeTab === tab.id
                 ? 'border-primary-500 text-primary-600'
@@ -169,8 +173,8 @@ export const Health: React.FC = () => {
                 label="Horas de Sueño"
                 type="number"
                 step="0.1"
-                value={sleepHours}
-                onChange={(e) => setSleepHours(e.target.value)}
+                value={formData.sleepHours}
+                onChange={(e) => setFormData({ ...formData, sleepHours: e.target.value })}
                 required
               />
               <Input
@@ -178,8 +182,8 @@ export const Health: React.FC = () => {
                 type="number"
                 min="1"
                 max="10"
-                value={sleepQuality}
-                onChange={(e) => setSleepQuality(e.target.value)}
+                value={formData.sleepQuality}
+                onChange={(e) => setFormData({ ...formData, sleepQuality: e.target.value })}
                 required
               />
             </>
@@ -191,8 +195,8 @@ export const Health: React.FC = () => {
               type="number"
               min="1"
               max="10"
-              value={activeTab === 'stress' ? stressLevel : energyLevel}
-              onChange={(e) => activeTab === 'stress' ? setStressLevel(e.target.value) : setEnergyLevel(e.target.value)}
+              value={activeTab === 'stress' ? formData.stressLevel : formData.energyLevel}
+              onChange={(e) => activeTab === 'stress' ? setFormData({ ...formData, stressLevel: e.target.value }) : setFormData({ ...formData, energyLevel: e.target.value })}
               required
             />
           )}
@@ -202,15 +206,15 @@ export const Health: React.FC = () => {
               <Input
                 label="RHR (Resting Heart Rate)"
                 type="number"
-                value={rhr}
-                onChange={(e) => setRhr(e.target.value)}
+                value={formData.rhr}
+                onChange={(e) => setFormData({ ...formData, rhr: e.target.value })}
                 required
               />
               <Input
                 label="HRV (Heart Rate Variability)"
                 type="number"
-                value={hrv}
-                onChange={(e) => setHrv(e.target.value)}
+                value={formData.hrv}
+                onChange={(e) => setFormData({ ...formData, hrv: e.target.value })}
                 required
               />
             </>

@@ -14,16 +14,18 @@ export const Gym: React.FC = () => {
   const [isExerciseModalOpen, setIsExerciseModalOpen] = useState(false);
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
 
-  // Session Form
-  const [sessionName, setSessionName] = useState('');
-  const [sessionDate, setSessionDate] = useState(new Date().toISOString().split('T')[0]);
-  const [sessionDuration, setSessionDuration] = useState('');
+ const [sessionForm, setSessionForm] = useState({
+  name: '',
+  date: new Date().toISOString().split('T')[0],
+  duration: '',
+});
 
-  // Exercise Form
-  const [exName, setExName] = useState('');
-  const [exSets, setExSets] = useState('');
-  const [exReps, setExReps] = useState('');
-  const [exWeight, setExWeight] = useState('');
+const [exerciseForm, setExerciseForm] = useState({
+  name: '',
+  sets: '',
+  reps: '',
+  weight: '',
+});
 
   useEffect(() => {
     fetchGymSessions();
@@ -32,13 +34,22 @@ export const Gym: React.FC = () => {
   const handleCreateSession = async (e: React.FormEvent) => {
     e.preventDefault();
     await addGymSession({
-      name: sessionName,
-      date: new Date(sessionDate + 'T12:00:00').toISOString(),
-      duration: Number(sessionDuration),
+      name: sessionForm.name,
+      date: new Date(sessionForm.date + 'T12:00:00').toISOString(),
+      duration: Number(sessionForm.duration),
     });
     setIsSessionModalOpen(false);
-    setSessionName('');
-    setSessionDuration('');
+   setSessionForm({
+    name: '',
+    date: new Date().toISOString().split('T')[0],
+    duration: '',
+  });
+    setExerciseForm({
+      name: '',
+      sets: '',
+      reps: '',
+      weight: '',
+    });
   };
 
   const handleAddExercise = async (e: React.FormEvent) => {
@@ -46,19 +57,21 @@ export const Gym: React.FC = () => {
     if (!selectedSessionId) return;
 
     await gymService.addExercise(selectedSessionId, {
-      name: exName,
-      sets: Number(exSets),
-      reps: Number(exReps),
-      weight: Number(exWeight),
+      name: exerciseForm.name,
+      sets: Number(exerciseForm.sets),
+      reps: Number(exerciseForm.reps),
+      weight: Number(exerciseForm.weight),
     });
 
     // Refresh sessions to show new exercise
     fetchGymSessions();
     setIsExerciseModalOpen(false);
-    setExName('');
-    setExSets('');
-    setExReps('');
-    setExWeight('');
+    setExerciseForm({
+      name: '',
+      sets: '',
+      reps: '',
+      weight: '',
+    });
   };
 
   const openExerciseModal = (sessionId: string) => {
@@ -143,23 +156,23 @@ export const Gym: React.FC = () => {
         <form onSubmit={handleCreateSession} className="space-y-4">
           <Input
             label="Nombre de la Sesión"
-            value={sessionName}
-            onChange={(e) => setSessionName(e.target.value)}
+            value={sessionForm.name}
+            onChange={(e) => setSessionForm({ ...sessionForm, name: e.target.value })}
             placeholder="Ej: Pierna y Hombro"
             required
           />
           <Input
             label="Fecha"
             type="date"
-            value={sessionDate}
-            onChange={(e) => setSessionDate(e.target.value)}
+            value={sessionForm.date}
+            onChange={(e) => setSessionForm({ ...sessionForm, date: e.target.value })}
             required
           />
           <Input
             label="Duración Total (min)"
             type="number"
-            value={sessionDuration}
-            onChange={(e) => setSessionDuration(e.target.value)}
+            value={sessionForm.duration}
+            onChange={(e) => setSessionForm({ ...sessionForm, duration: e.target.value })}
             required
           />
           <div className="pt-4">
@@ -177,8 +190,8 @@ export const Gym: React.FC = () => {
         <form onSubmit={handleAddExercise} className="space-y-4">
           <Input
             label="Nombre del Ejercicio"
-            value={exName}
-            onChange={(e) => setExName(e.target.value)}
+            value={exerciseForm.name}
+            onChange={(e) => setExerciseForm({ ...exerciseForm, name: e.target.value })}
             placeholder="Ej: Sentadilla"
             required
           />
@@ -186,22 +199,22 @@ export const Gym: React.FC = () => {
             <Input
               label="Series"
               type="number"
-              value={exSets}
-              onChange={(e) => setExSets(e.target.value)}
+              value={exerciseForm.sets}
+              onChange={(e) => setExerciseForm({ ...exerciseForm, sets: e.target.value })}
               required
             />
             <Input
               label="Reps"
               type="number"
-              value={exReps}
-              onChange={(e) => setExReps(e.target.value)}
+              value={exerciseForm.reps}
+              onChange={(e) => setExerciseForm({ ...exerciseForm, reps: e.target.value })}
               required
             />
             <Input
               label="Peso (kg)"
               type="number"
-              value={exWeight}
-              onChange={(e) => setExWeight(e.target.value)}
+              value={exerciseForm.weight}
+              onChange={(e) => setExerciseForm({ ...exerciseForm, weight: e.target.value })}
               required
             />
           </div>
