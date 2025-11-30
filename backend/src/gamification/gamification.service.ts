@@ -94,7 +94,7 @@ export class GamificationService {
    * Verifica y desbloquea badges para un usuario
    */
   async checkAndUnlockBadges(userId: string) {
-    const unlockedBadges = [];
+    const unlockedBadges: any[] = [];
 
     // Obtener todos los badges
     const allBadges = await this.prisma.badge.findMany();
