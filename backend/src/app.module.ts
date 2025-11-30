@@ -10,6 +10,7 @@ import { MealsModule } from './meals/meals.module';
 import { HealthModule } from './health/health.module';
 import { ReportsModule } from './reports/reports.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { GamificationModule } from './gamification/gamification.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     HealthModule,
     ReportsModule,
     NotificationsModule,
+    GamificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
