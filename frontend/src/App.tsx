@@ -6,6 +6,7 @@ import { PrivateRoute } from './components/PrivateRoute';
 import { Layout } from './components/Layout';
 import { ToastContainer } from './components/ui/ToastContainer';
 import { Spinner } from './components/ui/Spinner';
+import { GamificationManager } from './components/GamificationManager';
 
 // Lazy load pages
 const Landing = lazy(() => import('./pages/Landing').then(module => ({ default: module.Landing })));
@@ -39,6 +40,7 @@ const App: React.FC = () => {
   return (
     <ThemeProvider>
       <ToastContainer />
+      <GamificationManager />
       <Router>
         <Suspense fallback={<FullPageLoader />}>
           <Routes>
