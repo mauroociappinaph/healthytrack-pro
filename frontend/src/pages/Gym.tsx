@@ -29,7 +29,7 @@ const [exerciseForm, setExerciseForm] = useState({
 
   useEffect(() => {
     fetchGymSessions();
-  }, []);
+  }, [fetchGymSessions]);
 
   const handleCreateSession = async (e: React.FormEvent) => {
     e.preventDefault();

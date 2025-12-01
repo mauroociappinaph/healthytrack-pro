@@ -21,7 +21,7 @@ export const Walks: React.FC = () => {
 
   useEffect(() => {
     fetchWalks();
-  }, []);
+  }, [fetchWalks]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
