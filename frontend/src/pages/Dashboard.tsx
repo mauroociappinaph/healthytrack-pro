@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 import { useReportsStore } from '../store/reportsStore';
 import { Card } from '../components/ui/Card';
 import { CardSkeleton, CircleChartSkeleton } from '../components/ui/SkeletonLoader';
 import { RemindersPanel } from '../components/dashboard/RemindersPanel';
+import { XPWidget } from '../components/gamification/XPWidget';
 
 // Animation variants
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -17,7 +18,7 @@ const containerVariants = {
   }
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { y: 20, opacity: 0 },
   visible: {
     y: 0,
@@ -29,7 +30,7 @@ const itemVariants = {
   }
 };
 
-const counterVariants = {
+const counterVariants: Variants = {
   hidden: { scale: 0.8, opacity: 0 },
   visible: {
     scale: 1,
@@ -365,11 +366,12 @@ export const Dashboard: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Right Sidebar - Reminders Panel */}
+        {/* Right Sidebar - XP Widget & Reminders */}
         <motion.div
-          className="lg:col-span-1"
+          className="lg:col-span-1 space-y-6"
           variants={itemVariants}
         >
+          <XPWidget />
           <RemindersPanel />
         </motion.div>
       </div>

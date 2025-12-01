@@ -11,9 +11,15 @@ export interface Notification {
   createdAt: string;
 }
 
+interface GetAllParams {
+  page?: number;
+  limit?: number;
+  type?: Notification['type'];
+}
+
 export const notificationsService = {
-  getAll: async (): Promise<Notification[]> => {
-    const response = await api.get('/notifications');
+  getAll: async (params?: GetAllParams): Promise<Notification[]> => {
+    const response = await api.get('/notifications', { params });
     return response.data;
   },
 

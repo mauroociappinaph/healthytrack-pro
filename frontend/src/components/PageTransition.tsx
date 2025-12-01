@@ -24,7 +24,7 @@ const pageTransition = {
   type: 'tween',
   ease: 'anticipate',
   duration: 0.4
-};
+} as const;
 
 export const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   return (

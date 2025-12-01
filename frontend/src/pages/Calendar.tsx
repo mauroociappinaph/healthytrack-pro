@@ -29,7 +29,7 @@ export const Calendar: React.FC = () => {
 
   useEffect(() => {
     fetchMonthlyData();
-  }, [currentDate]);
+  }, [fetchMonthlyData, currentDate]);
 
   const handlePrevMonth = () => setCurrentDate(subMonths(currentDate, 1));
   const handleNextMonth = () => setCurrentDate(addMonths(currentDate, 1));

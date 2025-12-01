@@ -1,5 +1,4 @@
-import { format } from 'date-fns';
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const exportToCSV = (data: any[], filename: string) => {
   if (!data || data.length === 0) {
     console.warn('No data to export');
@@ -18,7 +17,7 @@ export const exportToCSV = (data: any[], filename: string) => {
         // Handle dates, nulls, and strings with commas
         if (value === null || value === undefined) return '';
         if (header.includes('date') || header.includes('Date')) {
-          return `"${new Date(value).toISOString()}"`;
+          return `"${new Date(value as string | number | Date).toISOString()}"`;
         }
         if (typeof value === 'string' && value.includes(',')) {
           return `"${value}"`;
@@ -32,8 +31,8 @@ export const exportToCSV = (data: any[], filename: string) => {
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
 
-  if (navigator.msSaveBlob) { // IE 10+
-    navigator.msSaveBlob(blob, filename);
+  if ((navigator as unknown as { msSaveBlob?: (blob: Blob, filename: string) => void }).msSaveBlob) { // IE 10+
+    (navigator as unknown as { msSaveBlob: (blob: Blob, filename: string) => void }).msSaveBlob(blob, filename);
   } else {
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);

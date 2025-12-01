@@ -9,6 +9,7 @@ import {
   type GymSession,
   type Meal,
 } from '../services/activityService';
+import { useGamificationStore } from '../stores/gamificationStore';
 
 interface ActivityStore {
   walks: Walk[];
@@ -55,6 +56,9 @@ export const useActivityStore = create<ActivityStore>((set) => ({
   addWalk: async (data: Partial<Walk>) => {
     const walk = await walksService.create(data);
     set((state) => ({ walks: [walk, ...state.walks] }));
+
+    // Award XP for workout
+    useGamificationStore.getState().addXP(50, 'Caminata completada');
   },
 
   deleteWalk: async (id: string) => {
@@ -72,6 +76,9 @@ export const useActivityStore = create<ActivityStore>((set) => ({
   addHomeExercise: async (data: Partial<HomeExercise>) => {
     const exercise = await homeExercisesService.create(data);
     set((state) => ({ homeExercises: [exercise, ...state.homeExercises] }));
+
+    // Award XP for workout
+    useGamificationStore.getState().addXP(50, 'Ejercicio en casa completado');
   },
 
   deleteHomeExercise: async (id: string) => {
@@ -89,6 +96,9 @@ export const useActivityStore = create<ActivityStore>((set) => ({
   addGymSession: async (data: Partial<GymSession>) => {
     const session = await gymService.createSession(data);
     set((state) => ({ gymSessions: [session, ...state.gymSessions] }));
+
+    // Award XP for workout
+    useGamificationStore.getState().addXP(50, 'Sesión de gimnasio completada');
   },
 
   deleteGymSession: async (id: string) => {
@@ -106,6 +116,9 @@ export const useActivityStore = create<ActivityStore>((set) => ({
   addMeal: async (data: Partial<Meal>) => {
     const meal = await mealsService.create(data);
     set((state) => ({ meals: [meal, ...state.meals] }));
+
+    // Award XP for meal
+    useGamificationStore.getState().addXP(20, 'Comida registrada');
   },
 
   deleteMeal: async (id: string) => {

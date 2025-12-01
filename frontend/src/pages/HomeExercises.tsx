@@ -21,7 +21,7 @@ export const HomeExercises: React.FC = () => {
 
   useEffect(() => {
     fetchHomeExercises();
-  }, []);
+  }, [fetchHomeExercises]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

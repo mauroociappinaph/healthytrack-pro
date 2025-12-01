@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNotificationsStore } from '../../store/notificationsStore';
-import { formatDistanceToNow } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { getNotificationColorClass, formatNotificationTime } from '../../utils';
 
 export const NotificationDropdown: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,15 +33,7 @@ export const NotificationDropdown: React.FC = () => {
     }
   };
 
-  const getTypeColor = (type: string) => {
-    const colors = {
-      achievement: 'text-yellow-600 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-900/20',
-      goal: 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20',
-      reminder: 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20',
-      alert: 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20',
-    };
-    return colors[type as keyof typeof colors] || colors.alert;
-  };
+
 
   return (
     <div className="relative">
@@ -116,7 +107,7 @@ export const NotificationDropdown: React.FC = () => {
                         onClick={() => handleNotificationClick(notification.id, notification.isRead)}
                       >
                         <div className="flex items-start">
-                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mr-3 ${getTypeColor(notification.type)}`}>
+                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mr-3 ${getNotificationColorClass(notification.type)}`}>
                             <span className="text-xl">{notification.icon || '📢'}</span>
                           </div>
                           <div className="flex-1 min-w-0">
@@ -132,10 +123,7 @@ export const NotificationDropdown: React.FC = () => {
                               {notification.message}
                             </p>
                             <p className="text-xs text-gray-500 dark:text-gray-500">
-                              {formatDistanceToNow(new Date(notification.createdAt), {
-                                addSuffix: true,
-                                locale: es
-                              })}
+                              {formatNotificationTime(notification.createdAt)}
                             </p>
                           </div>
                         </div>
