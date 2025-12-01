@@ -33,7 +33,7 @@ export const Health: React.FC = () => {
     fetchStress();
     fetchHeartMetrics();
     fetchEnergy();
-  }, []);
+  }, [fetchEnergy, fetchHeartMetrics, fetchSleep, fetchStress]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

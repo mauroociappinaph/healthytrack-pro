@@ -21,7 +21,7 @@ export const Meals: React.FC = () => {
 
   useEffect(() => {
     fetchMeals();
-  }, []);
+  }, [fetchMeals]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

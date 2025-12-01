@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { UserProgress, Badge, UserBadge, XPGainResult } from '../types/gamification';
-import api from '../services/api';
+import type { UserProgress, Badge, UserBadge, XPGainResult } from '../types/gamification';
+import { api } from '../services/api';
 
 interface GamificationState {
   progress: UserProgress | null;
@@ -30,9 +30,10 @@ export const useGamificationStore = create<GamificationState>((set, get) => ({
     try {
       const response = await api.get('/gamification/progress');
       set({ progress: response.data, loading: false });
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Error al obtener progreso';
       set({
-        error: error.response?.data?.message || 'Error al obtener progreso',
+        error: errorMessage,
         loading: false
       });
     }
@@ -42,7 +43,7 @@ export const useGamificationStore = create<GamificationState>((set, get) => ({
     try {
       const response = await api.get('/gamification/badges');
       set({ badges: response.data });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error fetching badges:', error);
     }
   },
@@ -51,7 +52,7 @@ export const useGamificationStore = create<GamificationState>((set, get) => ({
     try {
       const response = await api.get('/gamification/badges/unlocked');
       set({ unlockedBadges: response.data });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error fetching unlocked badges:', error);
     }
   },
@@ -68,7 +69,7 @@ export const useGamificationStore = create<GamificationState>((set, get) => ({
       await get().fetchUnlockedBadges();
 
       return result;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error adding XP:', error);
       return null;
     }
@@ -78,7 +79,7 @@ export const useGamificationStore = create<GamificationState>((set, get) => ({
     try {
       await api.post('/gamification/streak');
       await get().fetchProgress();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error updating streak:', error);
     }
   },
