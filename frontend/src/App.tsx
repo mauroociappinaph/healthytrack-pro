@@ -6,6 +6,7 @@ import { PrivateRoute } from './components/PrivateRoute';
 import { Layout } from './components/Layout';
 import { ToastContainer } from './components/ui/ToastContainer';
 import { Spinner } from './components/ui/Spinner';
+import { GamificationManager } from './components/GamificationManager';
 
 // Lazy load pages
 const Landing = lazy(() => import('./pages/Landing').then(module => ({ default: module.Landing })));
@@ -21,6 +22,7 @@ const HomeExercises = lazy(() => import('./pages/HomeExercises').then(module => 
 const Gym = lazy(() => import('./pages/Gym').then(module => ({ default: module.Gym })));
 const Meals = lazy(() => import('./pages/Meals').then(module => ({ default: module.Meals })));
 const Health = lazy(() => import('./pages/Health').then(module => ({ default: module.Health })));
+const Achievements = lazy(() => import('./pages/Achievements').then(module => ({ default: module.Achievements })));
 
 const FullPageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
@@ -38,6 +40,7 @@ const App: React.FC = () => {
   return (
     <ThemeProvider>
       <ToastContainer />
+      <GamificationManager />
       <Router>
         <Suspense fallback={<FullPageLoader />}>
           <Routes>
@@ -128,6 +131,14 @@ const App: React.FC = () => {
                 element={
                   <Layout>
                     <Health />
+                  </Layout>
+                }
+              />
+              <Route
+                path="/achievements"
+                element={
+                  <Layout>
+                    <Achievements />
                   </Layout>
                 }
               />

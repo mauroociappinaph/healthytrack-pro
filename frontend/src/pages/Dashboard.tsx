@@ -5,6 +5,7 @@ import { useReportsStore } from '../store/reportsStore';
 import { Card } from '../components/ui/Card';
 import { CardSkeleton, CircleChartSkeleton } from '../components/ui/SkeletonLoader';
 import { RemindersPanel } from '../components/dashboard/RemindersPanel';
+import { XPWidget } from '../components/gamification/XPWidget';
 
 // Animation variants
 const containerVariants: Variants = {
@@ -365,11 +366,12 @@ export const Dashboard: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Right Sidebar - Reminders Panel */}
+        {/* Right Sidebar - XP Widget & Reminders */}
         <motion.div
-          className="lg:col-span-1"
+          className="lg:col-span-1 space-y-6"
           variants={itemVariants}
         >
+          <XPWidget />
           <RemindersPanel />
         </motion.div>
       </div>
